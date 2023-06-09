@@ -1,6 +1,7 @@
 // 容器钩子
 import { defineStore, createPinia } from "pinia";
 import piniaPluginPersist from "pinia-plugin-persist";
+import { DEFAULT_PRIMARY } from "@/config/config";
 
 export const GlobalStore = defineStore({
 	// id: 必须的，在所有 Store 中唯一
@@ -8,13 +9,18 @@ export const GlobalStore = defineStore({
 	// 创建state
 	state: () => {
 		return {
-
 			// 个人的用户信息
 			userInfo: { id: 1, username: 'yxcr', avatar: "https://img2.baidu.com/it/u=2979343759,1090469389&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500" },
 			// 登录状态
 			isLogin: false,
 			// 生成二维码的key
 			qrKey: "",
+			// 主题
+			themeConfig: {
+				primary: DEFAULT_PRIMARY,
+				// 深色模式
+				isDark: false,
+			}
 		}
 	},
 	// 计算
@@ -30,6 +36,9 @@ export const GlobalStore = defineStore({
 		change() {
 			this.count += 2;
 			this.msg = "哈哈哈"
+		},
+		setThemeConfig(themeConfig) {
+			this.themeConfig = themeConfig;
 		}
 	},
 	// 开启数据缓存
@@ -37,7 +46,7 @@ export const GlobalStore = defineStore({
 		enabled: true,
 		strategies: [
 			{
-				paths: ["msg", "ary"],
+				paths: ["themeConfig"],
 				storage: localStorage,
 			},
 		],

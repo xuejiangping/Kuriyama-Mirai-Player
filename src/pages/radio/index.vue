@@ -3,11 +3,14 @@ import { getRadio } from '@/api/api'
 const router = useRouter()
 const state = reactive({
 	list: [],
-	currentPage: 1
+	currentPage: 1,
+	loading: true
 })
 const {
 	list,
-	currentPage
+	currentPage,
+	loading
+
 } = toRefs(state)
 
 onMounted(() => {
@@ -15,9 +18,11 @@ onMounted(() => {
 })
 
 const getSongList = async () => {
+	state.loading = true
 	const { data } = await getRadio({ limit: 30, offset: (state.currentPage - 1) * 30 })
-	console.log("🚀 => file: index.vue:19 => data:", data)
 	state.list = data.djRadios
+	state.loading = false
+
 }
 
 // 改变页数触发

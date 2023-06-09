@@ -1,6 +1,8 @@
 <script setup>
 import { GlobalStore } from "@/stores/index";
 import { loginStatus, createKey, createQR, checkKey, logout } from "@/api/api.js";
+import { ElMessage } from 'element-plus'
+
 const globalstore = GlobalStore()
 const router = useRouter();
 
@@ -26,19 +28,20 @@ const {
 	qrimg
 } = toRefs(state)
 
-const currentUser = computed(() => globalstore.userInfo)
 const currentUserstatus = computed(() => globalstore.isLogin)
 
 const toResult = () => {
 	router.push({ path: "/search", query: { keyWorks: kw.value } })
 }
-const resetForm = () => {
 
-}
 onMounted(async () => {
 	// 查看登录状态
 	loginStatus().then(res => {
-		if (res.data.data.account.status == -10) {
+		if (!res.data.data.account || res.data.data.account.status == -10) {
+			ElMessage.success({
+				message: "登录会解锁更多功能哦~",
+				type: 'success',
+			})
 			globalstore.isLogin = false
 		} else {
 			globalstore.isLogin = true

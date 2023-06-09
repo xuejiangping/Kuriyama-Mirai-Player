@@ -146,16 +146,13 @@ const handleTimeUpdate = async () => {
 			break
 		}
 	}
-}
-
-// 侦听歌词滚动的位置
-watch(() => state.currentLine, () => {
+	// 侦听歌词滚动的位置
 	const activeLine = document.querySelector('.lyrics-container li.active')
 	if (activeLine) {
 		const container = document.querySelector('.lyrics-container ul')
 		container.scrollTop = activeLine.offsetTop - container.clientHeight / 2 + activeLine.clientHeight
 	}
-})
+}
 
 // 当前时间更改
 const handleDurationChange = () => {
@@ -197,7 +194,7 @@ const parseLyrics = (lyric) => {
 	if (!lyric) return
 	const lines = lyric.split('\n')
 	return lines.map(line => {
-		const matches = line.match(/^\[(\d{2}):(\d{2}\.\d{3})\](.*)/)
+		const matches = line.match(/^\[(\d{2}):(\d{2}\.\d{2,3})\](.*)/)
 		if (matches) {
 			const minutes = parseInt(matches[1])
 			const seconds = parseFloat(matches[2])
@@ -215,9 +212,9 @@ const parseLyrics = (lyric) => {
 		@ended="handleEnded"></audio>
 	<div class="playerbox">
 		<div class="m-tandc">
-			<img :src="currentSong.cover + '?param=91y91'" alt="" @click="drawer = !drawer">
+			<img :src="currentSong.cover + '?param=91y90'" alt="" @click="drawer = !drawer">
 			<div class="titleandsinger">
-				<a href="javascript:;" style=" color: #000;">{{ currentSong.title }}</a>
+				<a href="javascript:;">{{ currentSong.title }}</a>
 				<a href="javascript:;" style="font-size: 13px;">{{ currentSong.singer }}</a>
 			</div>
 		</div>
@@ -250,14 +247,14 @@ const parseLyrics = (lyric) => {
 			</div>
 			<!-- 进度条 -->
 			<div class="m-slider">
-				<span type="info">{{ formatTime(currentTime) }}</span>
+				<span class="prismColor">{{ formatTime(currentTime) }}</span>
 				<div class="slider-demo-block">
 					<el-slider v-model="progress" :show-tooltip="false" @change="seek" style="width: 400px" />
 				</div>
-				<span type="info" style="margin-left: 18px;">{{ formatTime(duration) }}</span>
+				<span class="prismColor" style="margin-left: 18px;">{{ formatTime(duration) }}</span>
 			</div>
 		</div>
-		<el-drawer title="Vue3MusicPlayer" :modal="false" v-model="drawer" direction="ttb" destroy-on-close size="90%">
+		<el-drawer title="" :modal="false" v-model="drawer" direction="ttb" destroy-on-close size="89.5%">
 			<div class="showMusicBox">
 				<!-- 封面 -->
 				<el-image class="rotate" :style="{ animationPlayState: animationPlayState }" style="width: 350px; height:
@@ -294,6 +291,38 @@ const parseLyrics = (lyric) => {
 
 .lyrics-container {
 	height: 500px;
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 50%;
+		background: linear-gradient(to top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+		z-index: 2;
+		pointer-events: none;
+		/* make sure the overlay doesn't interfere with mouse events */
+		opacity: 1;
+		/* set initial opacity to 1 */
+		transition: opacity 0.5s ease-in-out;
+		/* add a transition for the opacity property */
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 50%;
+		background: linear-gradient(to bottom , rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+		z-index: 2;
+		pointer-events: none;
+		opacity: 1;
+		transition: opacity 0.5s ease-in-out;
+	}
 
 	ul {
 		overflow: auto;
@@ -303,25 +332,30 @@ const parseLyrics = (lyric) => {
 		padding: 0;
 		z-index: 1;
 
+		.active {
+			color: var(--el-color-primary);
+			font-size: 20px;
+			font-weight: bold;
+		}
+
+		/* 自定义滚动条样式 */
+		// 隐藏滚动条
+		&::-webkit-scrollbar {
+			width: 0;
+		}
+
 		li {
 			text-align: center;
 			padding: 15px 0px;
-			opacity: 0.75;
+			// opacity: 0.75;
 			/* 过渡动画，可根据需要调整 */
 			transition: all 0.3s ease-out;
 		}
 	}
 }
 
-/* 自定义滚动条样式 */
-// 隐藏滚动条
-.lyrics-container ul::-webkit-scrollbar {
-	width: 0;
-}
-
-.active {
-	color: #ff69b4;
-	font-size: 20px;
-	font-weight: bold;
+.lyrics-container.fade-out::before,
+.lyrics-container.fade-out::after {
+	opacity: 0;
 }
 </style>

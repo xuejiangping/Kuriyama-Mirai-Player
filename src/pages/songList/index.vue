@@ -3,11 +3,13 @@ import { songPlaylist } from '@/api/api'
 const router = useRouter()
 const state = reactive({
 	list: [],
-	currentPage: 1
+	currentPage: 1,
+	loading: true
 })
 const {
 	list,
-	currentPage
+	currentPage,
+	loading
 } = toRefs(state)
 
 onMounted(() => {
@@ -15,8 +17,11 @@ onMounted(() => {
 })
 
 const getSongList = async () => {
+	state.loading = true
 	const { data } = await songPlaylist({ limit: 30, offset: (state.currentPage - 1) * 30 })
 	state.list = data
+	state.loading = false
+
 }
 
 // 改变页数触发
@@ -28,20 +33,25 @@ const handleCurrentChange = (e) => {
 <template>
 	<div>
 		<div class="content-section menuBar-mv">
-			<div class="apps-card">
-				<div class="apps-item" v-for="(item, idx) in list.playlists" :key="idx"
-					@click="router.push({ path: '/playList', query: { id: item.id } })">
-					<div class="app-card">
-						<img :src="item.coverImgUrl + '?param=200y200'" alt="">
+			<el-skeleton :rows="5" animated :loading="loading">
+				<template #default>
+					<div class="apps-card">
+						<div class="apps-item" v-for="(item, idx) in list.playlists" :key="idx"
+							@click="router.push({ path: '/playList', query: { id: item.id } })">
+							<div class="app-card">
+								<img :src="item.coverImgUrl + '?param=200y200'" alt="">
+							</div>
+							<a href="javascript:;">{{ item.name }}</a>
+						</div>
 					</div>
-					<a href="javascript:;">{{ item.name }}</a>
-				</div>
-			</div>
-			<div class="pagination">
-				<el-pagination @current-change="handleCurrentChange" v-model:currentPage="currentPage" :page-size="30"
-					layout="prev, pager, next, jumper" :total="state.list.total">
-				</el-pagination>
-			</div>
+					<div class="pagination">
+						<el-pagination @current-change="handleCurrentChange" v-model:currentPage="currentPage"
+							:page-size="30" layout="prev, pager, next, jumper" :total="state.list.total">
+						</el-pagination>
+					</div>
+				</template>
+			</el-skeleton>
+
 		</div>
 	</div>
 </template>

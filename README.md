@@ -21,3 +21,5 @@ Install：
 yarn 
 Run：
 yarn dev
+文档说明
+https://neteasecloudmusicapi.vercel.app/#/  （可能需魔法上网）

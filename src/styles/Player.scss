@@ -32,7 +32,7 @@
 .r-slider {
 	width: 50px;
 }
-.btns{
+.btns {
 	z-index: 9999;
 }
 .MusicList {
@@ -86,11 +86,14 @@
 	a {
 		padding: 8px;
 		text-decoration: none;
-		color: var(--theme-color);
+		color: var(--prism-color);
 		display: flex;
 		align-items: center;
 		font-weight: 400;
 		font-size: 15px;
 		transition: 0.3s;
 	}
+}
+.prismColor {
+	color: var(--prism-color);
 }

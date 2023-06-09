@@ -21,20 +21,33 @@ const Emits = defineEmits(['rowdbclick'])
 
 
 const playerMusic = async (params) => {
-	// 1.获取歌曲链接
-	const { data } = await songUrl(params)
-	// 2.获取歌词
-	const resLyric = await lyric(params.id)
-	musicstore.songs.push({
-		title: params.title,
-		singer: params.singer,
-		cover: params.cover,
-		src: data.data[0].url,
-		time: params.time,
-		album: params.album,
-		Lyric: resLyric.data.lrc.lyric
-	})
-	musicstore.currentIndex = musicstore.songs.length - 1
+	const isExisting = musicstore.songs.findIndex(item => item.id == params.id)
+	if (isExisting != -1) {
+		musicstore.currentIndex = isExisting
+	} else {
+		// 1.获取歌曲链接
+		const { data } = await songUrl(params)
+		// 2.获取歌词
+		const resLyric = await lyric(params.id)
+		let isLyric = ""
+		try {
+			isLyric = resLyric.data.lrc.lyric
+		} catch (error) {
+			isLyric = ""
+			console.error(error)
+		}
+		musicstore.songs.push({
+			title: params.title,
+			singer: params.singer,
+			cover: params.cover,
+			src: data.data[0].url,
+			time: params.time,
+			album: params.album,
+			Lyric: isLyric,
+			id: params.id
+		})
+		musicstore.currentIndex = musicstore.songs.length - 1
+	}
 }
 const rowdbclick = (row, column, event) => {
 	console.log("🚀 => file: index.vue:62 => row:", row)

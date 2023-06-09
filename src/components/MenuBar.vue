@@ -12,7 +12,6 @@ const {
 
 
 watch(() => globalstore.userInfo.userId, async () => {
-	console.log(globalstore.userInfo.userId);
 	if (!globalstore.userInfo.userId) return
 	const { data } = await userPlaylist(globalstore.userInfo.userId)
 	state.list = data.playlist
@@ -28,7 +27,7 @@ const toUserList = (e) => {
 }
 </script>
 <template>
-	<div class="left-side">
+	<el-scrollbar class="left-side">
 		<div class="side-wrapper">
 			<div class="side-title">这里放LOGO</div>
 			<div class="side-menu">
@@ -145,6 +144,6 @@ const toUserList = (e) => {
 				</a>
 			</div>
 		</div>
-	</div>
+	</el-scrollbar>
 </template>
 <style lang='scss' scoped></style>
