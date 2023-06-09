@@ -49,7 +49,7 @@ html {
 	background-color: #dde2eb;
 }
 
-.el-table .el-table__cell{
+.el-table .el-table__cell {
 	padding: 14px 0;
 }
 .el-table {
@@ -77,4 +77,16 @@ html {
 .fade-enter-from,
 .fade-leave-to {
 	opacity: 0;
+}
+
+.about {
+	margin-left: 40px;
+	a {
+		text-decoration: none;
+		padding: 0 10px;
+		color: var(--prism-color);
+	}
+}
+.playerButton{
+	margin: 5px 0 10px 0;
 }

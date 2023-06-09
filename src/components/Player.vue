@@ -1,5 +1,6 @@
 <script setup>
 import '@/styles/Player.scss'
+import { lyric } from '@/api/api'
 import { musicStore } from '@/stores/musicStore'
 import { ElMessage } from 'element-plus'
 const router = useRouter()
@@ -62,8 +63,19 @@ watch(() => musicstore.currentIndex, () => {
 	play()
 })
 // 播放
-const play = () => {
+const play = async () => {
 	// 加载歌词
+	if (!currentSong.value.Lyric) {
+		const resLyric = await lyric(currentSong.value.id)
+		let isLyric = ""
+		try {
+			isLyric = resLyric.data.lrc.lyric
+		} catch (error) {
+			isLyric = ""
+			console.error(error)
+		}
+		musicstore.updateSongs({ Lyric: isLyric })
+	}
 	state.parsedLyrics = parseLyrics(currentSong.value.Lyric)
 	state.animationPlayState = "running"
 	state.playing = true
@@ -317,7 +329,7 @@ const parseLyrics = (lyric) => {
 		left: 0;
 		width: 100%;
 		height: 50%;
-		background: linear-gradient(to bottom , rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+		background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
 		z-index: 2;
 		pointer-events: none;
 		opacity: 1;

@@ -1,7 +1,9 @@
 <script setup>
-import { playListDetail, commentDetail } from '@/api/api'
+import { playListDetail, commentDetail, songUrl, lyric } from '@/api/api'
 import musicTable from "@/components/musicTable.vue";
 import commentsCard from "@/components/comments-card.vue";
+import { musicStore } from '@/stores/musicStore'
+const musicstore = musicStore()
 const route = useRoute()
 const state = reactive({
 	list: [],
@@ -10,7 +12,6 @@ const state = reactive({
 			nickname: "",
 			avatarUrl: ""
 		},
-		trackIds: []
 	},
 	tableData: [],
 	activeName: "first",
@@ -69,8 +70,31 @@ const playList = () => {
 	})
 }
 
-const handleClick = (idx) => {
-	// console.log("🚀 => file: index.vue:45 => idx:", idx)
+// 播放全部歌曲
+const playerAll = async () => {
+	//  1.遍历所有歌曲ID
+	const idList = state.tableData.map(item => item.id).join(",")
+	// 2.获取全部歌曲的歌曲链接
+	const songsUrlList = await songUrl({ id: idList })
+	// 倒叙获取全部歌曲的歌曲链接
+	const reversedSongsUrlList = songsUrlList.data.data.reverse()
+	// 3.存储歌曲数据
+	const songsList = state.tableData.map((item, index) => {
+		return {
+			title: item.title,
+			singer: item.singer,
+			cover: item.cover,
+			src: reversedSongsUrlList[index].url,
+			time: item.time,
+			album: item.album,
+			id: item.id,
+			mv: item.mv,
+		}
+	})
+	musicstore.songs.push(...songsList)
+	// 播放当前歌单的第一首歌
+	const currentListTopIdx = musicstore.songs.findIndex(item => item.id == state.tableData[0].id)
+	musicstore.currentIndex = currentListTopIdx
 }
 </script>
 <template>
@@ -89,6 +113,9 @@ const handleClick = (idx) => {
 									<el-avatar :size="30" :src="playlists.creator.avatarUrl + '?param=60y60'"></el-avatar>
 									<a href="javascript:;">{{ playlists.creator.nickname }}</a>
 								</div>
+								<div class="playerButton">
+									<el-button type="primary" round @click="playerAll">播放全部</el-button>
+								</div>
 								<div class="tags">
 									<el-tag class="tags-item" v-for="(item1, index) in playlists.tags" :key="index">{{ item1
 									}}</el-tag>
@@ -96,7 +123,7 @@ const handleClick = (idx) => {
 								<p> {{ playlists.description }}</p>
 							</div>
 						</div>
-						<el-tabs v-model="activeName" @tab-click="handleClick">
+						<el-tabs v-model="activeName">
 							<el-tab-pane name="first">
 								<template #label>
 									<span><i class="el-icon-date"></i> 歌单({{ playlists.trackIds.length }})</span>

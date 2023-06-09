@@ -27,15 +27,6 @@ const playerMusic = async (params) => {
 	} else {
 		// 1.获取歌曲链接
 		const { data } = await songUrl(params)
-		// 2.获取歌词
-		const resLyric = await lyric(params.id)
-		let isLyric = ""
-		try {
-			isLyric = resLyric.data.lrc.lyric
-		} catch (error) {
-			isLyric = ""
-			console.error(error)
-		}
 		musicstore.songs.push({
 			title: params.title,
 			singer: params.singer,
@@ -43,14 +34,14 @@ const playerMusic = async (params) => {
 			src: data.data[0].url,
 			time: params.time,
 			album: params.album,
-			Lyric: isLyric,
-			id: params.id
+			id: params.id,
+			mv: params.mv,
 		})
 		musicstore.currentIndex = musicstore.songs.length - 1
 	}
 }
 const rowdbclick = (row, column, event) => {
-	console.log("🚀 => file: index.vue:62 => row:", row)
+	playerMusic(row)
 }
 </script>
 <template>
@@ -93,6 +84,7 @@ const rowdbclick = (row, column, event) => {
 							d="M590.3 532.7l-118 88.5c-9.8 7.3-23.6 5.3-31-4.4-2.9-3.8-4.4-8.5-4.4-13.3v-177c0-12.2 9.9-22.1 22.1-22.1 4.8 0 9.4 1.6 13.3 4.4l118 88.5c9.8 7.3 11.8 21.2 4.4 31-1.2 1.6-2.7 3.1-4.4 4.4zM247.5 205.3h530.9c48.9 0 88.5 39.6 88.5 88.5v442.4c0 48.9-39.6 88.5-88.5 88.5H247.5c-48.9 0-88.5-39.6-88.5-88.5V293.8c0-48.9 39.7-88.5 88.5-88.5z m442.4 44.3H336v530.9h353.9V249.6zM203.3 382.3h88.5V249.6h-44.2c-24.4 0-44.2 19.8-44.2 44.2v88.5z m619.3 0v-88.5c0-24.4-19.8-44.2-44.2-44.2h-44.2v132.7h88.4zM203.3 647.7v88.5c0 24.4 19.8 44.2 44.2 44.2h44.2V647.7h-88.4z m0-44.2h88.5v-177h-88.5v177z m619.3 44.2h-88.5v132.7h44.2c24.4 0 44.2-19.8 44.2-44.2v-88.5z m0-44.2v-177h-88.5v177h88.5z"
 							p-id="3157" fill="#525B72"></path>
 					</svg>
+
 				</div>
 			</template>
 		</el-table-column>
