@@ -40,8 +40,8 @@ body {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	padding: 2em;
-
+	// padding: 2em;
+	height: 100%;
 	@media screen and (max-width: 480px) {
 		padding: 0.8em;
 	}
@@ -199,7 +199,7 @@ img {
 
 	&-number {
 		position: absolute;
-		background-color: #3a6df0;
+		background-color: var(--el-color-primary);
 		width: 16px;
 		height: 16px;
 		border-radius: 50%;
