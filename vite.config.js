@@ -23,13 +23,13 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 7171,
     cors: true,
-    // proxy: {
-    //   "/api": {
-    //     target: "http://localhost:9000", // easymock
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/api/, ""),
-    //   },
-    // },
+    proxy: {
+      "/colorApi": {
+        target: "http://zhongguose.com/", // easymock
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/colorApi/, ""),
+      },
+    },
   },
   css: {
     preprocessorOptions: {

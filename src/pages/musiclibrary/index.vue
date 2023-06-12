@@ -1,8 +1,11 @@
 <script setup>
+import { GlobalStore } from "@/stores/index";
 import musicTable from "@/components/musicTable.vue";
 import mv from "@/pages/mv/index.vue";
 import songList from "@/pages/songList/index.vue";
-import { newMusic, songPlaylist } from '@/api/api'
+import { newMusic, songPlaylist, recommendSongs } from '@/api/api'
+const globalstore = GlobalStore()
+const currentUserstatus = computed(() => globalstore.isLogin)
 const state = reactive({
 	activeName: "first",
 	buttonList: [
@@ -22,8 +25,31 @@ const {
 
 } = toRefs(state)
 
-const handleClick = () => {
+const handleClick = async (e) => {
+	state.tableData = []
+	switch (e.props.label) {
+		case "热门歌曲":
+			toSearch()
+			break;
+		case "每日推荐":
+			const { data } = await recommendSongs()
+			state.tableData = data.data.dailySongs.map(item => {
+				const names = item.ar.map(subItem => subItem.name).join(',');
+				return {
+					cover: item.al.picUrl,
+					title: item.name,
+					singer: names,
+					album: item.al.name,
+					time: item.dt,
+					id: item.id,
+					mv: item.mv
+				}
+			})
+			break;
 
+		default:
+			break;
+	}
 }
 onMounted(() => {
 	toSearch()
@@ -65,6 +91,9 @@ const toSearch = async () => {
 				</el-tab-pane>
 				<el-tab-pane label="MV" name="third">
 					<mv />
+				</el-tab-pane>
+				<el-tab-pane label="每日推荐" name="four" v-if="currentUserstatus">
+					<musicTable :data="tableData"></musicTable>
 				</el-tab-pane>
 			</el-tabs>
 		</div>

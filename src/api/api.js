@@ -51,7 +51,7 @@ export const userPlaylist = (data) => request.post(`/user/playlist?uid=${data}`)
 //每日歌单
 export const getdaylist = () => request.get("recommend/resource")
 //每日歌曲
-export const getsongday = () => request.get("recommend/songs")
+export const recommendSongs = () => request.get("recommend/songs")
 //获取验证码
 export const getuserverion = (data) => request.post("captcha/sent", data)
 // 生成二维码的key

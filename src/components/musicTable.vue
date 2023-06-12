@@ -19,7 +19,6 @@ const props = defineProps({
 })
 const Emits = defineEmits(['rowdbclick'])
 
-
 const playerMusic = async (params) => {
 	const isExisting = musicstore.songs.findIndex(item => item.id == params.id)
 	if (isExisting != -1) {
@@ -43,6 +42,7 @@ const playerMusic = async (params) => {
 const rowdbclick = (row, column, event) => {
 	playerMusic(row)
 }
+
 </script>
 <template>
 	<el-table :data="props.data" style="width: 100%" @row-dblclick="rowdbclick">

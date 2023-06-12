@@ -3,7 +3,7 @@ import { GlobalStore } from "@/stores/index";
 import { useTheme } from "@/hooks/useTheme";
 import { DEFAULT_PRIMARY } from "@/config/config";
 import darkSwitch from "@/components/darkSwitch.vue";
-
+import axios from "axios";
 const { changePrimary } = useTheme();
 const globalstore = GlobalStore()
 const themeConfig = computed(() => globalstore.themeConfig);
@@ -13,9 +13,10 @@ const state = reactive({
 const {
 	list,
 } = toRefs(state)
-const getAssetImgs = (imgname) => {
-	return new URL(`../../static/img/thme/${imgname}`, import.meta.url).href
-}
+
+// const getAssetImgs = (imgname) => {
+// 	return new URL(`../../static/img/thme/${imgname}`, import.meta.url).href
+// }
 const preset = reactive([
 	{
 		colorName: '默认',
@@ -24,27 +25,22 @@ const preset = reactive([
 	},
 	{
 		colorName: '牡丹粉红',
-		colorUrl: '牡丹粉红.png',
 		gbrUrl: '#eea2a4'
 	},
 	{
 		colorName: '栗紫',
-		colorUrl: '栗紫.png',
 		gbrUrl: '#5a191b'
 	},
 	{
 		colorName: '香叶红',
-		colorUrl: '香叶红.png',
 		gbrUrl: '#f07c82'
 	},
 	{
 		colorName: '艳红',
-		colorUrl: '艳红.png',
 		gbrUrl: '#ed5a65'
 	},
 	{
 		colorName: '茶花红',
-		colorUrl: '茶花红.png',
 		gbrUrl: '#ee3f4d'
 	},
 
@@ -89,6 +85,14 @@ function rgbaToHex(rgba) {
 	const hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 	return `#${hex}`;
 }
+
+onMounted(() => {
+	axios.get("/colorApi/colors.json").then(res => {
+		state.list = res.data
+		state.list.unshift({ hex: DEFAULT_PRIMARY, name: "默认", pinyin: "moren" })
+	})
+})
+
 </script>
 <template>
 	<div>
@@ -101,20 +105,23 @@ function rgbaToHex(rgba) {
 					</div>
 				</div>
 			</div>
-			<div class="content-section-title">
+			<div class="content-section-title" style="margin-bottom: 0px;">
 				<h2 class="theme-h2">主题</h2>
 			</div>
 			<div class="theme-preset">
-				<div class="content-section">
-					<div class="apps-card ">
-						<div class="apps-item mv-text" v-for="(item, index) in preset" :key="index"
-							@click="showTheme(item.gbrUrl)">
-							<div class="app-card m-theme">
-								<img :src="getAssetImgs(item.colorUrl)" alt="">
+				<div class="content-section" style="margin-top: 0px;">
+					<el-scrollbar height="350">
+						<div class="apps-card">
+							<div class="apps-item mv-text" v-for="(item, index) in list" :key="index"
+								@click="showTheme(item.hex)">
+								<div class="app-card m-theme">
+									<div :style="{ backgroundColor: item.hex }"
+										style="width: 230px;height: 123px;border-radius: 5px;"></div>
+								</div>
+								<a href="javascript:;">{{ item.name }}({{ (item.pinyin) }})</a>
 							</div>
-							<a href="javascript:;">{{ item.colorName }}</a>
 						</div>
-					</div>
+					</el-scrollbar>
 				</div>
 			</div>
 			<div class="content-section-title">
@@ -124,7 +131,7 @@ function rgbaToHex(rgba) {
 				@change="changePrimarys" />
 			<div class="footer">
 				Copyright © 2013 by Perchouli Shanzhai to Nipponcolors<br />
-				参看: 色谱 中科院科技情报编委会名词室.科学出版社,1957. Adobe RGB / CMYK FOGRA39, Dot Gain 15% Screenshot沪ICP备17025116号-2
+				参考: 色谱 中科院科技情报编委会名词室.科学出版社,1957. Adobe RGB / CMYK FOGRA39, Dot Gain 15% Screenshot沪ICP备17025116号-2
 			</div>
 
 		</div>
@@ -133,5 +140,27 @@ function rgbaToHex(rgba) {
 <style lang='scss' scoped>
 .theme-h2 {
 	color: var(--theme-color);
+}
+
+
+.infinite-list {
+	height: 300px;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.infinite-list .infinite-list-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 50px;
+	background: var(--el-color-primary-light-9);
+	margin: 10px;
+	color: var(--el-color-primary);
+}
+
+.infinite-list .infinite-list-item+.list-item {
+	margin-top: 10px;
 }
 </style>

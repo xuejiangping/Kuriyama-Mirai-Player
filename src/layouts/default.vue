@@ -21,9 +21,9 @@ import Player from "@/components/Player.vue";
 					<!-- //////////////////// -->
 					<router-view v-slot="{ Component }">
 						<transition name="el-fade-in-linear">
-							<!-- <keep-alive include="@/pages/index.vue"> -->
-							<component :is="Component" />
-							<!-- </keep-alive> -->
+							<keep-alive>
+								<component :is="Component" />
+							</keep-alive>
 						</transition>
 					</router-view>
 				</div>

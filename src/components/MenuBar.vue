@@ -18,9 +18,6 @@ watch(() => globalstore.userInfo.userId, async () => {
 },
 	{ immediate: true }
 )
-
-
-
 const toUserList = (e) => {
 	router.push({ path: "/playList", query: { id: e } })
 
@@ -29,7 +26,9 @@ const toUserList = (e) => {
 <template>
 	<el-scrollbar class="left-side">
 		<div class="side-wrapper">
-			<div class="side-title">这里放LOGO</div>
+			<div class="side-title flex" style="justify-content: center;">
+				<img src="@/static/img/logo2.png" alt="" style="width: 150px;">
+			</div>
 			<div class="side-menu">
 				<router-link to="/">
 					<svg viewBox="0 0 512 512">

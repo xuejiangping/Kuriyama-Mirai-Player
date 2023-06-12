@@ -73,18 +73,17 @@ const playList = () => {
 // 播放全部歌曲
 const playerAll = async () => {
 	//  1.遍历所有歌曲ID
-	const idList = state.tableData.map(item => item.id).join(",")
+	const idListJoin = state.tableData.map(item => item.id).join(",")
 	// 2.获取全部歌曲的歌曲链接
-	const songsUrlList = await songUrl({ id: idList })
-	// 倒叙获取全部歌曲的歌曲链接
-	const reversedSongsUrlList = songsUrlList.data.data.reverse()
+	const songsUrlList = await songUrl({ id: idListJoin })
 	// 3.存储歌曲数据
 	const songsList = state.tableData.map((item, index) => {
+		const findIdUrl = songsUrlList.data.data.find(item2 => item2.id == item.id)
 		return {
 			title: item.title,
 			singer: item.singer,
 			cover: item.cover,
-			src: reversedSongsUrlList[index].url,
+			src: findIdUrl.url,
 			time: item.time,
 			album: item.album,
 			id: item.id,
