@@ -1,7 +1,7 @@
 import axios from 'axios'
 // 创建实例时设置配置的默认值
 const instance = axios.create({
-	baseURL: 'https://www.xiangzi77.tk/',    //例如h：ttps://test-test-test.vercel.app/
+	baseURL: import.meta.env.VITE_API_URL,    //例如h：ttps://test-test-test.vercel.app/
 	changeOrigin: true,  //跨域
 	// timeout: 100000,
 	withCredentials: true,

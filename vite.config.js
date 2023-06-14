@@ -29,6 +29,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/colorApi/, ""),
       },
+      "/api": {
+        target: "https://www.xiangzi77.tk/", // easymock
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
     },
   },
   css: {
