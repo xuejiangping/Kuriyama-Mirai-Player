@@ -8,7 +8,7 @@ Kuriyama Mirai Player 一款基于 Vue3.2、Vite4、Pinia、Element-Plus 开源�
 
 vercel：https://kuriyamamiraiplayer.vercel.app/#/ (可能需要魔法)
 
-    https://www.xiangzi77.tk/#/               (可能不需要魔法)
+other:  https://www.xiangzi77.tk/#/               (可能不需要魔法)
 
 ### 代码仓库 ⭐
 
