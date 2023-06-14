@@ -87,7 +87,7 @@ function rgbaToHex(rgba) {
 }
 
 onMounted(() => {
-	axios.get(`${import.meta.env.VITE_ColorAPI_URL}/colors.json`).then(res => {
+	axios.get(`${import.meta.env.VITE_ColorAPI_URL}/colorsList`).then(res => {
 		state.list = res.data
 		state.list.unshift({ hex: DEFAULT_PRIMARY, name: "默认", pinyin: "moren" })
 	})
