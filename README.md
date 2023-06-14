@@ -25,7 +25,7 @@ GitHub：https://github.com/XiangZi7/Kuriyama-Mirai-Player
 
 #Github
 
-`git clone https://github.com/XiangZi7/Vue3MusicPlayer.git`
+`git clone https://github.com/XiangZi7/Kuriyama-Mirai-Player.git`
 
 * Install：
   `yarn`
