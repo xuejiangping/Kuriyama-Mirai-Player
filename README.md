@@ -3,10 +3,13 @@
 介绍 📖
 Kuriyama Mirai Player 一款基于 Vue3.2、Vite4、Pinia、Element-Plus 开源的Web音乐播放器，使用目前最新技术栈开发。
 
+
 在线预览 👀
+
 vercel：https://vue3-music-player.vercel.app/#/
 
 代码仓库 ⭐
+
 GitHub：https://github.com/XiangZi7/Vue3MusicPlayer
 
 项目功能 🔨
