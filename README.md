@@ -6,7 +6,7 @@ Kuriyama Mirai Player 一款基于 Vue3.2、Vite4、Pinia、Element-Plus 开源�
 
 ### 在线预览 👀
 
-vercel：https://vue3-music-player.vercel.app/#/
+vercel：https://kuriyamamiraiplayer.vercel.app/#/
 
 ### 代码仓库 ⭐
 
