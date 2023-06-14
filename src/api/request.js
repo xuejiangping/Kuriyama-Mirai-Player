@@ -5,7 +5,6 @@ const instance = axios.create({
 	changeOrigin: true,  //跨域
 	// timeout: 100000,
 	withCredentials: true,
-	// headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 });
 // 添加请求拦截器
 instance.interceptors.request.use(
