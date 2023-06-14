@@ -10,7 +10,7 @@ vercel：https://kuriyamamiraiplayer.vercel.app/#/
 
 ### 代码仓库 ⭐
 
-GitHub：[https://github.com/XiangZi7/Vue3MusicPlayer](https://github.com/XiangZi7/Kuriyama-Mirai-Player)
+GitHub：https://github.com/XiangZi7/Kuriyama-Mirai-Player
 
 项目功能 🔨
 使用 Vue3.3 开发，单文件组件＜ script setup ＞
