@@ -5,7 +5,6 @@ const instance = axios.create({
 	changeOrigin: true,  //跨域
 	// timeout: 100000,
 	withCredentials: true,
-	cors: true,
 });
 // 添加请求拦截器
 instance.interceptors.request.use(
