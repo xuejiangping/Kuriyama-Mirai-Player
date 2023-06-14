@@ -1,6 +1,6 @@
 <script setup>
 import '@/styles/Player.scss'
-import { lyric } from '@/api/api'
+import { lyric, commentMusic } from '@/api/api'
 import { musicStore } from '@/stores/musicStore'
 import { ElMessage } from 'element-plus'
 const router = useRouter()
@@ -8,7 +8,6 @@ const musicstore = musicStore()
 const audio = ref()
 const state = reactive({
 	list: [],
-	// currentTime: 0,
 	volumes: 70,
 	playing: false,
 	currentIndex: 0,
@@ -31,7 +30,11 @@ const state = reactive({
 	animationPlayState: "paused",
 	parsedLyrics: [],
 	currentLine: -1,
-
+	// 歌曲评论
+	commentsList: [],
+	currentCommentsPage: 1,
+	CommentsTotal: 0,
+	loading: true
 })
 const {
 	list,
@@ -43,7 +46,11 @@ const {
 	drawer,
 	animationPlayState,
 	parsedLyrics,
-	currentLine
+	currentLine,
+	commentsList,
+	currentCommentsPage,
+	CommentsTotal,
+	loading
 } = toRefs(state)
 // 当前播放歌曲
 const currentSong = computed(() => musicstore.songs[musicstore.currentIndex])
@@ -56,11 +63,13 @@ onMounted(() => {
 	pause()
 	audio.value.src = currentSong.value.src
 	state.currenPlayerState = state.isPlayerModel[0].icon
-
+	getCommentList()
+	state.parsedLyrics = parseLyrics(currentSong.value.Lyric)
 })
 // 侦听是否立即播放
 watch(() => musicstore.currentIndex, () => {
 	play()
+	getCommentList()
 })
 // 播放
 const play = async () => {
@@ -218,6 +227,24 @@ const parseLyrics = (lyric) => {
 	}).filter(line => line !== null)
 }
 
+
+// 评论分页
+// 改变页数触发
+const handleCurrentChange = () => {
+	getCommentList()
+}
+// 获取歌曲评论
+const getCommentList = () => {
+	state.loading = true
+	// 1.清空评论数据
+	state.commentsList = []
+	// 2.加载歌曲的评论
+	commentMusic({ id: currentSong.value.id, offset: (state.currentCommentsPage - 1) * 20, limit: 20 }).then(res => {
+		state.commentsList = res.data
+		state.CommentsTotal = res.data.total
+		state.loading = false
+	})
+}
 </script>
 <template>
 	<audio ref="audio" :src="currentSong.src" @timeupdate="handleTimeUpdate" @durationchange="handleDurationChange"
@@ -267,18 +294,56 @@ const parseLyrics = (lyric) => {
 			</div>
 		</div>
 		<el-drawer title="" :modal="false" v-model="drawer" direction="ttb" destroy-on-close size="89.5%">
-			<div class="showMusicBox">
-				<!-- 封面 -->
-				<el-image class="rotate" :style="{ animationPlayState: animationPlayState }" style="width: 350px; height:
-					350px;border-radius: 50%;" :src="currentSong.cover + '?param=350y350'"></el-image>
-				<!-- 歌词 -->
-				<div class="lyrics-container">
-					<ul>
-						<li v-for="(line, index) in parsedLyrics" :key="index" :class="{ active: currentLine === index }">
-							{{ line.text }}
-						</li>
-					</ul>
+			<div>
+				<div class="showMusicBox">
+					<!-- 封面 -->
+					<div style="margin-right: 150px;">
+						<div style="position: relative;">
+							<img class="vinyl rotate" :style="{ animationPlayState: animationPlayState }"
+								src="../static/img/vinyl.png" alt="">
+							<el-image class="elImg" :src="currentSong.cover + '?param=350y350'"></el-image>
+						</div>
+						<!-- <el-image class="rotate" :style="{ animationPlayState: animationPlayState }"
+							:src="currentSong.cover + '?param=350y350'"></el-image> -->
+					</div>
+					<!-- 歌词 -->
+					<div class="lyrics-container">
+						<ul>
+							<li v-for="(line, index) in parsedLyrics" :key="index"
+								:class="{ active: currentLine === index }">
+								{{ line.text }}
+							</li>
+						</ul>
+					</div>
 				</div>
+				<div class="comments">
+					<div class="content-section " style="margin-top: 0;">
+						<div class="apps-card">
+							<el-skeleton :rows="5" animated :loading="loading">
+								<template #default>
+									<div class="app-card usercom" v-for="(item, index) in commentsList.comments"
+										:key="index">
+										<span>
+											<el-image class="useravatar" :src="item.user.avatarUrl + '?param=32y32'"
+												alt=""></el-image>
+											{{ item.user.nickname }}
+										</span>
+										<div class="app-card__subtext">{{ item.content }}</div>
+										<div class="app-card__footer" v-if="item.ipLocation.location">
+											<span>IP:{{ item.ipLocation.location }}</span>
+											<span>{{ item.timeStr }}</span>
+										</div>
+									</div>
+								</template>
+							</el-skeleton>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pagination">
+				<el-pagination @current-change="handleCurrentChange" v-model:currentPage="currentCommentsPage"
+					:page-size="30" layout="prev, pager, next, jumper" :total="CommentsTotal">
+				</el-pagination>
 			</div>
 		</el-drawer>
 	</div>

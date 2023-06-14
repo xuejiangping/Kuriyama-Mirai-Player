@@ -28,7 +28,7 @@ export const musicStore = defineStore({
 		enabled: true,
 		strategies: [
 			{
-				paths: ["2"],
+				paths: ["songs"],
 				storage: localStorage,
 			},
 		],

@@ -4,12 +4,14 @@ const router = useRouter()
 const state = reactive({
 	list: [],
 	currentPage: 1,
-	loading: true
+	loading: true,
+	songListCount: 0
 })
 const {
 	list,
 	currentPage,
-	loading
+	loading,
+	songListCount
 } = toRefs(state)
 
 onMounted(() => {
@@ -20,6 +22,7 @@ const getSongList = async () => {
 	state.loading = true
 	const { data } = await songPlaylist({ limit: 30, offset: (state.currentPage - 1) * 30 })
 	state.list = data
+	state.songListCount = data.total
 	state.loading = false
 
 }
@@ -46,12 +49,11 @@ const handleCurrentChange = (e) => {
 					</div>
 					<div class="pagination">
 						<el-pagination @current-change="handleCurrentChange" v-model:currentPage="currentPage"
-							:page-size="30" layout="prev, pager, next, jumper" :total="state.list.total">
+							:page-size="30" layout="prev, pager, next, jumper" :total="songListCount">
 						</el-pagination>
 					</div>
 				</template>
 			</el-skeleton>
-
 		</div>
 	</div>
 </template>

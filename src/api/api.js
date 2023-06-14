@@ -62,3 +62,6 @@ export const createQR = (data) => request.post("/login/qr/create", data)
 export const checkKey = (data) => request.post("/login/qr/check", data)
 // 获取歌词
 export const lyric = (id) => request.get(`/lyric?id=${id}`)
+// 歌曲评论
+export const commentMusic = (params) => request.get(`/comment/music`, { params })
+

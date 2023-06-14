@@ -862,7 +862,7 @@ img {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	margin-left: -13px;
+	// margin-left: -13px;
 
 	a {
 		display: block;
@@ -1145,7 +1145,7 @@ img {
 .usercom {
 	padding: 20px;
 	border: 1px solid var(--theme-bg-color);
-	width: calc(33.3% - 20px);
+	width: calc(33.3% - 10px);
 	margin: 5px;
 }
 
@@ -1234,6 +1234,18 @@ img {
 	align-items: center;
 	justify-content: space-around;
 	margin: 0px 100px;
+	height: 100%;
+	.vinyl {
+		width: 350px;
+		height: 350px;
+		position: absolute;
+		right: -180px;
+	}
+	.elImg {
+		width: 350px;
+		height: 350px;
+		box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+	}
 }
 .el-drawer {
 	box-shadow: none;
