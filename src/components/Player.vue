@@ -3,6 +3,8 @@ import '@/styles/Player.scss'
 import { lyric, commentMusic } from '@/api/api'
 import { musicStore } from '@/stores/musicStore'
 import { ElMessage } from 'element-plus'
+import playerIcon from "@/static/img/aplayer/播放.svg";
+import pauseIcon from "@/static/img/aplayer/暂停.svg";
 const router = useRouter()
 const musicstore = musicStore()
 const audio = ref()
@@ -21,8 +23,8 @@ const state = reactive({
 		{ model: "随机播放", icon: "/src/static/img/aplayer/随机.svg" },
 	],
 	isPlayerModel: [
-		{ model: "播放", icon: "/src/static/img/aplayer/播放.svg" },
-		{ model: "暂停", icon: "/src/static/img/aplayer/暂停.svg" }
+		{ model: "播放", icon: playerIcon },
+		{ model: "暂停", icon: pauseIcon }
 	],
 	currenPlayerState: "",
 	// 抽屉
