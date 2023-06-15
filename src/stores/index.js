@@ -20,7 +20,9 @@ export const GlobalStore = defineStore({
 				primary: DEFAULT_PRIMARY,
 				// 深色模式
 				isDark: false,
-			}
+			},
+			// 视频选集信息
+			anthologyObj: {}
 		}
 	},
 	// 计算
@@ -39,6 +41,9 @@ export const GlobalStore = defineStore({
 		},
 		setThemeConfig(themeConfig) {
 			this.themeConfig = themeConfig;
+		},
+		setAnthologyObj(anthologyObj) {
+			this.anthologyObj = anthologyObj
 		}
 	},
 	// 开启数据缓存
