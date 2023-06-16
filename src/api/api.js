@@ -64,4 +64,8 @@ export const checkKey = (data) => request.post("/login/qr/check", data)
 export const lyric = (id) => request.get(`/lyric?id=${id}`)
 // 歌曲评论
 export const commentMusic = (params) => request.get(`/comment/music`, { params })
+// 动漫搜索
+export const videoSearch = (params) => request.post(`/video/search`, params)
+// 获取动漫Url
+export const videoUrl = (params) => request.post(`/video/chapter`, params)
 

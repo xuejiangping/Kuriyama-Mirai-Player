@@ -1,5 +1,6 @@
 <script setup>
 import axios from "axios";
+import { videoUrl } from '@/api/api'
 import { GlobalStore } from "@/stores/index";
 const globalstore = GlobalStore()
 const route = useRoute()
@@ -15,7 +16,7 @@ const {
 
 onMounted(async () => {
 	state.loading = true
-	const { data } = await axios.get("https://node-server-blush.vercel.app/videoChapter", { params: { id: route.params.id } })
+	const { data } = await videoUrl({ id: route.params.id })
 	console.log("🚀 => file: [id].vue:13 => data:", data)
 	state.loading = false
 	state.list = data.data

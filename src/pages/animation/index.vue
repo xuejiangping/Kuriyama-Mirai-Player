@@ -1,4 +1,5 @@
 <script setup>
+import { videoSearch } from '@/api/api'
 import axios from "axios";
 const router = useRouter()
 const state = reactive({
@@ -18,7 +19,7 @@ const {
 
 const toResult = async () => {
 	state.loading = true
-	const { data } = await axios.get(`https://node-server-blush.vercel.app/video?name=${state.input}`)
+	const { data } = await videoSearch({ name: state.input })
 	state.list = data.data
 	state.total = data.count
 	state.loading = false
@@ -27,7 +28,7 @@ const toResult = async () => {
 <template>
 	<div>
 		<div class="content-section">
-			<span class="mb-20 text-center">因vecel被ban了，可能需要魔法上网才能搜索得到动漫</span>
+			<!-- <span class="mb-20 text-center">因vecel被ban了，可能需要魔法上网才能搜索得到动漫</span> -->
 			<div class="video">
 				<input type="text" placeholder="请输入动漫名称" @keyup.enter='toResult' v-model="input">
 				<el-button type="primary" round @click="toResult">搜索</el-button>
