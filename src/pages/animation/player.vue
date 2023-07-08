@@ -16,6 +16,7 @@ const {
 	title,
 	src
 } = toRefs(state)
+
 watch(() => route.params.id, () => {
 	state.src = route.params.id
 })
